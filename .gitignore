@@ -1,0 +1,131 @@
+# =============================================================================
+# DESARROLLO MOVIL ADSO - SENA
+# Entregas organizadas por semana
+# =============================================================================
+
+# =============================================================================
+# SOLUCIONES DEL INSTRUCTOR
+# No subir carpetas de soluciones
+# =============================================================================
+
+**/solution/
+
+# =============================================================================
+# REACT NATIVE / EXPO
+# =============================================================================
+
+.expo/
+.expo-shared/
+.easignore
+.metro-cache/
+.cache/
+dist/
+web-build/
+expo-env.d.ts
+
+# EAS Build
+.eas/
+
+# =============================================================================
+# NODE.JS / JAVASCRIPT / TYPESCRIPT
+# =============================================================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Artefactos de compilacion
+build/
+out/
+.next/
+.nuxt/
+
+# =============================================================================
+# ANDROID / IOS (si alguna actividad los genera)
+# =============================================================================
+
+ios/Pods/
+ios/build/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.keystore
+!debug.keystore
+
+# =============================================================================
+# VARIABLES DE ENTORNO Y SECRETOS
+# =============================================================================
+
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# =============================================================================
+# EDITORES / IDE
+# =============================================================================
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# SISTEMA OPERATIVO
+# =============================================================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# =============================================================================
+# LOGS Y ARCHIVOS TEMPORALES
+# =============================================================================
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+tmp/
+temp/
+
+# =============================================================================
+# TESTING
+# =============================================================================
+
+coverage/
+.nyc_output/
+.jest-cache/
+maestro/.maestro/
+
+# =============================================================================
+# EXPORTACIONES GENERADAS
+# =============================================================================
+
+_exports/
