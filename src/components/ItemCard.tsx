@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import type { Service } from "../types";
+import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
 interface ItemCardProps {
   service: Service;
@@ -31,16 +32,23 @@ export default function ItemCard({ service }: ItemCardProps) {
       />
 
       <View style={styles.content}>
-        <Text style={styles.name}>{service.name}</Text>
+        <View style={styles.heading}>
+          <Text style={styles.name}>{service.name}</Text>
 
-        <Text style={styles.description}>
-          {service.description}
-        </Text>
+          <View style={styles.categoryBadge}>
+            <Text style={styles.category}>{service.category}</Text>
+          </View>
+        </View>
+
+        <Text style={styles.description}>{service.description}</Text>
 
         <View style={styles.footer}>
-          <Text style={styles.price}>
-            ${service.price.toLocaleString("es-CO")}
-          </Text>
+          <View>
+            <Text style={styles.priceLabel}>Precio estimado</Text>
+            <Text style={styles.price}>
+              ${service.price.toLocaleString("es-CO")}
+            </Text>
+          </View>
 
           <Text style={styles.duration}>{service.duration}</Text>
         </View>
@@ -51,11 +59,12 @@ export default function ItemCard({ service }: ItemCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: 14,
-    marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.border,
+    marginHorizontal: SPACING.xl,
+    marginBottom: SPACING.md,
     overflow: "hidden",
   },
   cardPressed: {
@@ -67,32 +76,55 @@ const styles = StyleSheet.create({
     height: 170,
   },
   content: {
-    padding: 18,
+    padding: SPACING.card,
+  },
+  heading: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: SPACING.sm,
+    marginBottom: SPACING.sm,
   },
   name: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#17202A",
-    marginBottom: 8,
+    flex: 1,
+    fontSize: TYPOGRAPHY.size.heading,
+    fontWeight: TYPOGRAPHY.weight.bold,
+    color: COLORS.text,
+  },
+  categoryBadge: {
+    backgroundColor: COLORS.background,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: 20,
+  },
+  category: {
+    color: COLORS.primary,
+    fontSize: TYPOGRAPHY.size.caption,
+    fontWeight: TYPOGRAPHY.weight.semibold,
   },
   description: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: "#5B6573",
-    marginBottom: 16,
+    fontSize: TYPOGRAPHY.size.body,
+    lineHeight: TYPOGRAPHY.lineHeight.body,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.lg,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
+  priceLabel: {
+    color: COLORS.muted,
+    fontSize: TYPOGRAPHY.size.caption,
+    marginBottom: SPACING.xs,
+  },
   price: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: "#16804A",
+    fontSize: TYPOGRAPHY.size.heading,
+    fontWeight: TYPOGRAPHY.weight.bold,
+    color: COLORS.accent,
   },
   duration: {
-    fontSize: 13,
-    color: "#5B6573",
+    fontSize: TYPOGRAPHY.size.small,
+    color: COLORS.textSecondary,
   },
 });
