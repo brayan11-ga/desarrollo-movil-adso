@@ -1,5 +1,11 @@
 
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import type { Service } from "../types";
 
 interface ItemCardProps {
@@ -8,34 +14,60 @@ interface ItemCardProps {
 
 export default function ItemCard({ service }: ItemCardProps) {
   return (
-    <View style={styles.card}>
-      <Text style={styles.name}>{service.name}</Text>
+    <Pressable
+      style={({ pressed }) => [
+        styles.card,
+        pressed && styles.cardPressed,
+      ]}
+      onPress={() => {
+        console.log(`Servicio seleccionado: ${service.name}`);
+      }}
+    >
+      <Image
+        source={service.image}
+        style={styles.image}
+        resizeMode="cover"
+        accessibilityLabel={service.name}
+      />
 
-      <Text style={styles.description}>
-        {service.description}
-      </Text>
+      <View style={styles.content}>
+        <Text style={styles.name}>{service.name}</Text>
 
-      <View style={styles.footer}>
-        <Text style={styles.price}>
-          ${service.price.toLocaleString("es-CO")}
+        <Text style={styles.description}>
+          {service.description}
         </Text>
 
-        <Text style={styles.duration}>
-          {service.duration}
-        </Text>
+        <View style={styles.footer}>
+          <Text style={styles.price}>
+            ${service.price.toLocaleString("es-CO")}
+          </Text>
+
+          <Text style={styles.duration}>{service.duration}</Text>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
-    padding: 18,
     borderRadius: 14,
     marginBottom: 14,
     borderWidth: 1,
     borderColor: "#E5E7EB",
+    overflow: "hidden",
+  },
+  cardPressed: {
+    opacity: 0.75,
+    transform: [{ scale: 0.98 }],
+  },
+  image: {
+    width: "100%",
+    height: 170,
+  },
+  content: {
+    padding: 18,
   },
   name: {
     fontSize: 18,
