@@ -1,6 +1,15 @@
 
-import HomeScreen from "./src/screens/HomeScreen";
+import { NavigationContainer } from "@react-navigation/native";
+
+import RootNavigator from "./src/navigation/RootNavigator";
+import { FavoritesProvider } from "./src/context/FavoritesContext";
 
 export default function App() {
-  return <HomeScreen />;
+  return (
+    <FavoritesProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </FavoritesProvider>
+  );
 }

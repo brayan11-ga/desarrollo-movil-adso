@@ -1,5 +1,8 @@
 
 import { useCallback, useMemo, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { HomeStackParamList } from "../navigation/types";
 import {
   FlatList,
   Keyboard,
@@ -18,6 +21,9 @@ import type { Service } from "../types";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
 export default function HomeScreen() {
+  const navigation =
+      useNavigation<NativeStackNavigationProp<HomeStackParamList, "HomeList">>();
+
   const [searchText, setSearchText] = useState("");
 
   const filteredServices = useMemo(() => {
@@ -34,10 +40,23 @@ export default function HomeScreen() {
     );
   }, [searchText]);
 
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<Service>) => <ItemCard service={item} />,
-    [],
-  );
+const renderItem = useCallback(
+  ({ item }: ListRenderItemInfo<Service>) => (
+    <ItemCard
+      service={item}
+      onPress={() =>
+        navigation.navigate({
+          name: "HomeDetail",
+          params: {
+            id: item.id,
+            name: item.name
+          }
+        })
+      }
+    />
+  ),
+  [navigation],
+);
 
   const renderSeparator = useCallback(
     () => <View style={styles.separator} />,
@@ -107,21 +126,23 @@ export default function HomeScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <FlatList
+      <FlatList<Service>
         contentContainerStyle={styles.listContent}
         data={filteredServices}
         ItemSeparatorComponent={renderSeparator}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         keyboardShouldPersistTaps="handled"
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: Service) => item.id}
         ListEmptyComponent={renderEmptyState}
         ListFooterComponent={
-          <Text style={styles.footer}>Calidad y confianza en cada espacio.</Text>
+          <Text style={styles.footer}>
+            Calidad y confianza en cada espacio.
+          </Text>
         }
         ListHeaderComponent={listHeader}
         onScrollBeginDrag={() => Keyboard.dismiss()}
         renderItem={renderItem}
-      />
+/>
     </KeyboardAvoidingView>
   );
 }

@@ -1,64 +1,114 @@
 # CleanPro
 
-CleanPro es una aplicación móvil de ejemplo para consultar servicios de una empresa de limpieza. Esta entrega integra la lista virtualizada y la búsqueda de la semana 2 sobre la pantalla existente.
+CleanPro es una aplicación móvil de ejemplo para consultar servicios de una empresa de limpieza residencial y comercial. Esta entrega amplía el catálogo y la búsqueda de la Semana 2 mediante navegación entre pantallas, visualización de detalles y gestión de servicios favoritos.
 
 ## Dominio
 
-Empresa de limpieza residencial y comercial. El catálogo muestra servicios, categorías, descripciones, precios estimados en pesos colombianos y duración aproximada.
+Empresa de limpieza residencial y comercial. El catálogo presenta servicios ficticios con categorías, descripciones, precios estimados en pesos colombianos y duración aproximada.
 
 ## Funcionalidades
 
-- Catálogo de 12 servicios ficticios en una lista `FlatList`.
-- Búsqueda inmediata por nombre, descripción y categoría.
-- Búsqueda sin distinguir mayúsculas ni tildes.
-- Botón para limpiar la consulta y restaurar todos los servicios.
-- Mensaje personalizado cuando no hay coincidencias.
-- Ajuste de pantalla para el teclado y opción de cerrarlo al enviar o desplazar la lista.
-- Tarjetas reutilizables con categoría, descripción, precio estimado y duración.
+- Catálogo de 12 servicios mediante `FlatList`.
+- Búsqueda por nombre, descripción y categoría, sin distinguir mayúsculas ni tildes.
+- Limpieza de la consulta y mensaje personalizado cuando no hay resultados.
+- Ajuste de pantalla para el teclado.
+- Tarjetas reutilizables con información de los servicios.
+- Navegación por pestañas entre Inicio y Favoritos.
+- Navegación Stack desde el catálogo hasta el detalle de un servicio.
+- Envío de `id` y `name` mediante parámetros de navegación tipados.
+- Gestión de servicios favoritos mediante un contexto compartido.
 
 ## Tecnologías
 
-- Expo `~57.0.30`
-- React `19.2.3`
-- React Native `0.86.3`
-- TypeScript `~6.0.3` con modo estricto
-- `pnpm` como gestor de paquetes
+- Expo SDK `~58.0.17`
+- React `19.3.0`
+- React Native `0.88.0`
+- TypeScript `~6.0.3`
+- React Navigation 7
+- `@expo/vector-icons`
+- `pnpm`
 
 ## Instalación y ejecución
 
-Desde la carpeta que contiene `package.json` (raíz de este proyecto):
+Desde la raíz del proyecto, ejecuta:
 
 ```bash
 pnpm install
 pnpm start
 ```
 
-Después, abre el proyecto con Expo Go o un emulador. También puedes usar `pnpm android`, `pnpm ios` (requiere macOS y Xcode) o `pnpm web`.
+Abre la aplicación en Expo Go o en un emulador compatible. También puedes utilizar `pnpm android`, `pnpm ios` o `pnpm web`, si estos comandos están configurados en `package.json`.
 
-## Pantalla y decisiones de diseño
+## Navegación
 
-La pantalla principal conserva la identidad de CleanPro de la semana 1: encabezado verde oscuro, fondo claro y tarjetas blancas. El encabezado de bienvenida y el campo de búsqueda están en la cabecera de `FlatList`, para que formen parte del mismo desplazamiento que el catálogo. Los colores, tamaños de texto y espacios reutilizables viven en `src/theme/index.ts`.
+La aplicación utiliza dos niveles de navegación:
 
-El catálogo usa datos locales fijos, así que la pantalla no ofrece recarga de datos.
+- **Bottom Tabs:** permite cambiar entre Inicio y Favoritos.
+- **Native Stack:** permite navegar desde el catálogo hasta el detalle de un servicio.
 
-## Comprobación de semana 2
+La navegación se encuentra tipada mediante `RootTabParamList` y `HomeStackParamList`, evitando el uso innecesario de `any`.
 
-- [x] `FlatList` con 12 servicios y `keyExtractor` basado en `id`.
-- [x] `renderItem`, separador y mensaje vacío personalizado.
-- [x] Búsqueda en tiempo real por nombre, descripción y categoría.
-- [x] Consulta insensible a mayúsculas y tildes, con control para limpiarla.
-- [x] `ItemCard` muestra más de tres campos relevantes.
-- [x] `KeyboardAvoidingView` con comportamiento según plataforma.
-- [x] `useMemo` para filtrar y `useCallback` para renderizar tarjetas, separador y estado vacío.
-- [x] Tipos explícitos y configuración TypeScript estricta; sin `any` añadido.
-- [x] Tema centralizado con `COLORS`, `TYPOGRAPHY` y `SPACING`.
+## Pantallas
+
+### Inicio
+
+Presenta el catálogo de servicios y la búsqueda. Cada servicio permite acceder a su pantalla de detalle.
+
+### Detalle del servicio
+
+Muestra la información del servicio seleccionado y recibe su identificador y nombre mediante parámetros tipados.
+
+### Favoritos
+
+Permite consultar y gestionar los servicios favoritos mediante el contexto compartido `FavoritesContext`.
+
+## Diseño y estructura
+
+La interfaz conserva la identidad visual de CleanPro: encabezado verde oscuro, fondo claro y tarjetas blancas. Los colores, tamaños de texto y espacios reutilizables se centralizan en `src/theme/index.ts`.
+
+El catálogo utiliza datos locales de prueba y no requiere conexión a una API externa.
+
+Estructura principal:
+
+```text
+src/
+├── components/
+├── context/
+├── data/
+├── navigation/
+├── screens/
+└── theme/
+
+screenshots/
+├── home.png
+├── detail.png
+└── favorites.png
+
+App.tsx
+README.md
+```
+
+## Comprobación de la Semana 3
+
+- [x] Navegación por pestañas entre Inicio y Favoritos.
+- [x] Navegación Stack desde el listado hasta el detalle.
+- [x] Envío de parámetros `id` y `name`.
+- [x] Tipos `RootTabParamList` y `HomeStackParamList`.
+- [x] Contexto compartido para gestionar favoritos.
+- [x] Integración con el catálogo y la búsqueda de la Semana 2.
 
 ## Capturas de evidencia
 
-No se incluyen capturas porque no se ejecutó la app en un dispositivo o emulador. Al ejecutar la aplicación, crea `evidencias/` dentro de esta carpeta y guarda allí:
+Las capturas de pantalla se almacenan en la carpeta `screenshots/`, ubicada en la raíz del proyecto.
 
-1. `evidencias/lista-servicios.png`: pantalla inicial con el catálogo.
-2. `evidencias/busqueda.png`: consulta escrita y resultados filtrados.
-3. `evidencias/sin-resultados.png`: consulta sin coincidencias y mensaje vacío.
+### Inicio
 
-Puedes insertar cada imagen en esta sección con Markdown después de tomarlas.
+![Pantalla de Inicio](screenshots/home.png)
+
+### Detalle del servicio
+
+![Detalle del servicio](screenshots/detail.png)
+
+### Favoritos
+
+![Pantalla de Favoritos](screenshots/favorites.png)

@@ -7,22 +7,22 @@ import {
   View,
 } from "react-native";
 import type { Service } from "../types";
+import type { PressableStateCallbackType } from "react-native";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
 interface ItemCardProps {
   service: Service;
+   onPress: () => void;
 }
 
-export default function ItemCard({ service }: ItemCardProps) {
+export default function ItemCard({ service, onPress }: ItemCardProps) {
   return (
     <Pressable
-      style={({ pressed }) => [
+      style={({ pressed }: PressableStateCallbackType) => [
         styles.card,
         pressed && styles.cardPressed,
       ]}
-      onPress={() => {
-        console.log(`Servicio seleccionado: ${service.name}`);
-      }}
+      onPress={onPress}
     >
       <Image
         source={service.image}
