@@ -1,12 +1,11 @@
+
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface FavoritesStore {
   favoriteIds: string[];
-
-  addFavorite: (id: string) => void;
-  removeFavorite: (id: string) => void;
+  toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
 }
 
@@ -15,29 +14,27 @@ export const useFavoritesStore = create<FavoritesStore>()(
     (set, get) => ({
       favoriteIds: [],
 
-      addFavorite: (id) => {
-        if (get().favoriteIds.includes(id)) return;
+      toggleFavorite: (id) => {
+        const currentIds = get().favoriteIds;
 
-        set((state) => ({
-          favoriteIds: [...state.favoriteIds, id],
-        }));
+        if (currentIds.includes(id)) {
+          set({
+            favoriteIds: currentIds.filter(
+              (favoriteId) => favoriteId !== id
+            ),
+          });
+        } else {
+          set({
+            favoriteIds: [...currentIds, id],
+          });
+        }
       },
-
-      removeFavorite: (id) =>
-        set((state) => ({
-          favoriteIds: state.favoriteIds.filter(
-            (favoriteId) => favoriteId !== id
-          ),
-        })),
 
       isFavorite: (id) => get().favoriteIds.includes(id),
     }),
     {
       name: "cleanpro-favorites",
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({
-        favoriteIds: state.favoriteIds,
-      }),
     }
   )
 );
