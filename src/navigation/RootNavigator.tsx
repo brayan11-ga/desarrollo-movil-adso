@@ -12,6 +12,7 @@ import HomeScreen from '../screens/HomeScreen';
 import DetailScreen from '../screens/DetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import { useFavoritesStore } from '../stores/favoritesStore';
+import { services } from '../data/mockData';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -36,7 +37,13 @@ function HomeStackNavigator() {
 
 export default function RootNavigator() {
   // El badge se actualiza cuando cambia el total, sin suscribir todo el store.
-  const favoriteCount = useFavoritesStore((state) => state.favoriteIds.length);
+    const favoriteIds = useFavoritesStore(
+  (state) => state.favoriteIds
+);
+
+const favoriteCount = services.filter((service) =>
+  favoriteIds.includes(service.id)
+).length;
 
   return (
     <Tab.Navigator

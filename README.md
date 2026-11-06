@@ -158,4 +158,4 @@ Las capturas de pantalla se almacenan en la carpeta `screenshots/`, ubicada en l
 
 ### 04 — Persistencia
 
-![Persistencia al Cerrar la App](/screenshots/04-persistencia-asyncstorage.png)
+![Persistencia al Cerrar la App](screenshots/04-persistencia-asyncstorage.png)

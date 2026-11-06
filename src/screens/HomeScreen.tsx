@@ -138,7 +138,6 @@ export default function HomeScreen() {
       <FlatList<Service>
         contentContainerStyle={styles.listContent}
         data={filteredServices}
-        extraData={favoriteIds}
         ItemSeparatorComponent={renderSeparator}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         keyboardShouldPersistTaps="handled"

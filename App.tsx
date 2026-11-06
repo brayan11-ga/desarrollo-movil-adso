@@ -1,34 +1,63 @@
 
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import RootNavigator from "./src/navigation/RootNavigator";
 import { useFavoritesStore } from "./src/stores/favoritesStore";
 import { COLORS, SPACING, TYPOGRAPHY } from "./src/theme";
 
 export default function App() {
-  const hydrationStatus = useFavoritesStore((state) => state.hydrationStatus);
+  const [isHydrated, setIsHydrated] = useState(
+    useFavoritesStore.persist.hasHydrated()
+  );
 
-  // Esperamos la lectura para no mostrar corazones, listas o badges incorrectos.
-  if (hydrationStatus !== "ready") {
+  const [hydrationError, setHydrationError] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe =
+      useFavoritesStore.persist.onFinishHydration(() => {
+        setIsHydrated(true);
+        setHydrationError(false);
+      });
+
+    if (useFavoritesStore.persist.hasHydrated()) {
+      setIsHydrated(true);
+    }
+
+    return unsubscribe;
+  }, []);
+
+  if (!isHydrated) {
     return (
       <View style={styles.loadingContainer}>
-        {hydrationStatus === "loading" ? (
+        {hydrationError ? null : (
           <ActivityIndicator
             accessibilityLabel="Cargando favoritos"
             color={COLORS.primary}
             size="large"
           />
-        ) : null}
+        )}
+
         <Text accessibilityRole="alert" style={styles.loadingText}>
-          {hydrationStatus === "error"
+          {hydrationError
             ? "No pudimos recuperar tus favoritos. Vuelve a intentarlo."
             : "Cargando favoritos…"}
         </Text>
-        {hydrationStatus === "error" ? (
+
+        {hydrationError ? (
           <Pressable
             accessibilityRole="button"
-            onPress={() => void useFavoritesStore.persist.rehydrate()}
+            onPress={() => {
+              setHydrationError(false);
+              void useFavoritesStore.persist.rehydrate();
+            }}
             style={styles.retryButton}
           >
             <Text style={styles.retryText}>Reintentar</Text>
