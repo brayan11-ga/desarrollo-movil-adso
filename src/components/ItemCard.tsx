@@ -8,14 +8,22 @@ import {
 } from "react-native";
 import type { Service } from "../types";
 import type { PressableStateCallbackType } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
 interface ItemCardProps {
   service: Service;
-   onPress: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  onPress: () => void;
 }
 
-export default function ItemCard({ service, onPress }: ItemCardProps) {
+export default function ItemCard({
+  service,
+  isFavorite,
+  onToggleFavorite,
+  onPress,
+}: ItemCardProps) {
   return (
     <Pressable
       style={({ pressed }: PressableStateCallbackType) => [
@@ -30,6 +38,24 @@ export default function ItemCard({ service, onPress }: ItemCardProps) {
         resizeMode="cover"
         accessibilityLabel={service.name}
       />
+
+      <Pressable
+        accessibilityLabel={`${isFavorite ? "Quitar de" : "Agregar a"} favoritos: ${service.name}`}
+        accessibilityRole="button"
+        accessibilityState={{ selected: isFavorite }}
+        onPress={(event) => {
+          // El corazón cambia favoritos sin abrir el detalle de la tarjeta.
+          event.stopPropagation();
+          onToggleFavorite();
+        }}
+        style={styles.favoriteButton}
+      >
+        <Ionicons
+          name={isFavorite ? "heart" : "heart-outline"}
+          color={COLORS.accent}
+          size={24}
+        />
+      </Pressable>
 
       <View style={styles.content}>
         <View style={styles.heading}>
@@ -77,6 +103,17 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: SPACING.card,
+  },
+  favoriteButton: {
+    position: "absolute",
+    top: SPACING.md,
+    right: SPACING.md,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 22,
+    backgroundColor: COLORS.surface,
   },
   heading: {
     flexDirection: "row",

@@ -11,6 +11,7 @@ import type {
 import HomeScreen from '../screens/HomeScreen';
 import DetailScreen from '../screens/DetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
+import { useFavoritesStore } from '../stores/favoritesStore';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -34,6 +35,9 @@ function HomeStackNavigator() {
 }
 
 export default function RootNavigator() {
+  // El badge se actualiza cuando cambia el total, sin suscribir todo el store.
+  const favoriteCount = useFavoritesStore((state) => state.favoriteIds.length);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -58,6 +62,7 @@ export default function RootNavigator() {
         component={FavoritesScreen}
         options={{
           title: 'Favoritos',
+          tabBarBadge: favoriteCount > 0 ? favoriteCount : undefined,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="heart-outline" color={color} size={size} />
           ),

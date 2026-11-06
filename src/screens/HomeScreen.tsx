@@ -19,10 +19,16 @@ import ItemCard from "../components/ItemCard";
 import { services } from "../data/mockData";
 import type { Service } from "../types";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
+import { useFavoritesStore } from "../stores/favoritesStore";
 
 export default function HomeScreen() {
   const navigation =
-      useNavigation<NativeStackNavigationProp<HomeStackParamList, "HomeList">>();
+    useNavigation<NativeStackNavigationProp<HomeStackParamList, "HomeList">>();
+
+  // Cada selector suscribe únicamente los IDs o la acción que necesita la pantalla.
+  const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
   const [searchText, setSearchText] = useState("");
 
@@ -40,23 +46,26 @@ export default function HomeScreen() {
     );
   }, [searchText]);
 
-const renderItem = useCallback(
-  ({ item }: ListRenderItemInfo<Service>) => (
-    <ItemCard
-      service={item}
-      onPress={() =>
-        navigation.navigate({
-          name: "HomeDetail",
-          params: {
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<Service>) => (
+      <ItemCard
+        service={item}
+        isFavorite={favoriteIds.includes(item.id)}
+        onToggleFavorite={() =>
+          favoriteIds.includes(item.id)
+            ? removeFavorite(item.id)
+            : addFavorite(item.id)
+        }
+        onPress={() =>
+          navigation.navigate("HomeDetail", {
             id: item.id,
-            name: item.name
-          }
-        })
-      }
-    />
-  ),
-  [navigation],
-);
+            name: item.name,
+          })
+        }
+      />
+    ),
+    [navigation, favoriteIds, addFavorite, removeFavorite],
+  );
 
   const renderSeparator = useCallback(
     () => <View style={styles.separator} />,
@@ -129,6 +138,7 @@ const renderItem = useCallback(
       <FlatList<Service>
         contentContainerStyle={styles.listContent}
         data={filteredServices}
+        extraData={favoriteIds}
         ItemSeparatorComponent={renderSeparator}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         keyboardShouldPersistTaps="handled"
@@ -142,7 +152,7 @@ const renderItem = useCallback(
         ListHeaderComponent={listHeader}
         onScrollBeginDrag={() => Keyboard.dismiss()}
         renderItem={renderItem}
-/>
+      />
     </KeyboardAvoidingView>
   );
 }

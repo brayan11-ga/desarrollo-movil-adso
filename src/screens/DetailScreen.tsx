@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import type { PressableStateCallbackType } from "react-native";
-import { useFavorites } from "../context/FavoritesContext";
+import { useFavoritesStore } from "../stores/favoritesStore";
 import type { HomeStackParamList } from "../navigation/types";
 import { services } from "../data/mockData";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
@@ -21,8 +21,9 @@ export default function DetailScreen() {
   const route = useRoute<DetailRouteProp>();
   const { id, name } = route.params;
 
-  const { toggleFavorite, isFavorite } = useFavorites();
-  const favorite = isFavorite(id);
+  const favorite = useFavoritesStore((state) => state.favoriteIds.includes(id));
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
   const service = services.find((item) => item.id === id);
 
@@ -54,7 +55,7 @@ export default function DetailScreen() {
             favorite ? "Quitar de favoritos" : "Agregar a favoritos"
           }
           accessibilityState={{ selected: favorite }}
-          onPress={() => toggleFavorite(id)}
+          onPress={() => (favorite ? removeFavorite(id) : addFavorite(id))}
           style={({ pressed }: PressableStateCallbackType) => [
             styles.favoriteButton,
             favorite && styles.favoriteButtonActive,

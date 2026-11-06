@@ -10,7 +10,7 @@ import {
 
 import ItemCard from "../components/ItemCard";
 import type { Service } from "../types";
-import { useFavorites } from "../context/FavoritesContext";
+import { useFavoritesStore } from "../stores/favoritesStore";
 import { services } from "../data/mockData";
 import type { RootTabParamList } from "../navigation/types";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
@@ -19,8 +19,10 @@ export default function FavoritesScreen() {
   const navigation =
     useNavigation<BottomTabNavigationProp<RootTabParamList>>();
 
-  const { favoriteIds } = useFavorites();
+  const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
+  // Resolvemos los IDs contra el catálogo sin duplicar objetos en el store.
   const favoriteServices = services.filter((service) =>
     favoriteIds.includes(service.id),
   );
@@ -40,31 +42,34 @@ export default function FavoritesScreen() {
           </Text>
 
           <Text style={styles.emptyText}>
-            Explora los servicios y pulsa “Agregar a favoritos”
-            en el detalle de los que te interesen.
+            Explora los servicios y pulsa el corazón de una tarjeta o
+            “Agregar a favoritos” en el detalle de los que te interesen.
           </Text>
         </View>
       ) : (
         <FlatList<Service>
           data={favoriteServices}
+          extraData={favoriteIds}
           keyExtractor={(item: Service) => item.id}
           renderItem={({ item }: { item: Service }) => (
             <ItemCard
-            service={item}
-            onPress={() =>
-            navigation.navigate("Home", {
-            screen: "HomeDetail",
-            params: {
-            id: item.id,
-            name: item.name,
-          },
-        })
-      }
-    />
-  )}
-  contentContainerStyle={styles.list}
-  showsVerticalScrollIndicator={false}
-/>
+              service={item}
+              isFavorite={true}
+              onToggleFavorite={() => removeFavorite(item.id)}
+              onPress={() =>
+                navigation.navigate("Home", {
+                  screen: "HomeDetail",
+                  params: {
+                    id: item.id,
+                    name: item.name,
+                  },
+                })
+              }
+            />
+          )}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
       )}
     </View>
   );

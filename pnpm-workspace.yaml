@@ -1,3 +1,5 @@
+saveExact: true
+
 minimumReleaseAgeExclude:
   - '@expo/cli@58.1.11 || 58.1.13'
   - '@expo/schema-utils@58.0.2'
