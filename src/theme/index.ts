@@ -10,6 +10,7 @@ export const COLORS = {
   muted: "#64748B",
   placeholder: "#94A3B8",
   border: "#E5E7EB",
+  error: "#B91C1C",
   accent: "#16804A",
 } as const;
 
