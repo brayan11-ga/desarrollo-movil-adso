@@ -8,6 +8,7 @@ export type Service = {
 
 export type HomeStackParamList = {
   HomeList: undefined;
+  CreateService: undefined;
   HomeDetail: {
     id: string;
     name: string;

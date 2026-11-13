@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { HomeStackParamList } from "../navigation/types";
 import {
+  Button,
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
@@ -16,7 +17,8 @@ import {
   type ListRenderItemInfo,
 } from "react-native";
 import ItemCard from "../components/ItemCard";
-import { services } from "../data/mockData";
+import ServiceQueryStatus from "../components/ServiceQueryStatus";
+import { useItems } from "../hooks/useItems";
 import type { Service } from "../types";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 import { useFavoritesStore } from "../stores/favoritesStore";
@@ -31,8 +33,10 @@ export default function HomeScreen() {
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
   const [searchText, setSearchText] = useState("");
+  const { data, isLoading, isError, isFetching, refetch } = useItems();
 
   const filteredServices = useMemo(() => {
+    const services = data ?? [];
     const query = normalizeSearch(searchText);
 
     if (query.length === 0) {
@@ -44,7 +48,7 @@ export default function HomeScreen() {
         normalizeSearch(field).includes(query),
       ),
     );
-  }, [searchText]);
+  }, [data, searchText]);
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<Service>) => (
@@ -87,6 +91,19 @@ export default function HomeScreen() {
     );
   }, [searchText]);
 
+  if (isLoading) {
+    return <ServiceQueryStatus message="Cargando servicios…" />;
+  }
+
+  if (isError) {
+    return (
+      <ServiceQueryStatus
+        message="No se pudo cargar el catálogo."
+        onRetry={() => void refetch()}
+      />
+    );
+  }
+
   const listHeader = (
     <View>
       <View style={styles.header}>
@@ -98,6 +115,11 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.searchSection}>
+        <Button
+          title="Nuevo servicio"
+          color={COLORS.primary}
+          onPress={() => navigation.navigate("CreateService")}
+        />
         <Text style={styles.searchTitle}>¿Qué necesitas limpiar?</Text>
         <View style={styles.searchField}>
           <TextInput
@@ -124,7 +146,7 @@ export default function HomeScreen() {
           ) : null}
         </View>
         <Text style={styles.resultCount}>
-          {filteredServices.length} de {services.length} servicios
+          {filteredServices.length} de {data?.length ?? 0} servicios
         </Text>
       </View>
     </View>
@@ -150,6 +172,8 @@ export default function HomeScreen() {
           </Text>
         }
         ListHeaderComponent={listHeader}
+        onRefresh={refetch}
+        refreshing={isFetching}
         onScrollBeginDrag={() => Keyboard.dismiss()}
         renderItem={renderItem}
       />
@@ -205,6 +229,7 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.lg,
   },
   searchTitle: {
+    marginTop: SPACING.lg,
     color: COLORS.text,
     fontSize: TYPOGRAPHY.size.heading,
     fontWeight: TYPOGRAPHY.weight.bold,

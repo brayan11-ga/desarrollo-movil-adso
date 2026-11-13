@@ -9,9 +9,11 @@ import {
 } from "react-native";
 
 import ItemCard from "../components/ItemCard";
+import ServiceQueryStatus from "../components/ServiceQueryStatus";
+import { useItems } from "../hooks/useItems";
 import type { Service } from "../types";
 import { useFavoritesStore } from "../stores/favoritesStore";
-import { services } from "../data/mockData";
+import { services as previousServices } from "../data/mockData";
 import type { RootTabParamList } from "../navigation/types";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
@@ -21,11 +23,17 @@ export default function FavoritesScreen() {
 
   const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
+  const { data, isLoading, isError, refetch } = useItems();
 
   // Resolvemos los IDs contra el catálogo sin duplicar objetos en el store.
-  const favoriteServices = services.filter((service) =>
+  const previousFavorites = previousServices.filter((service) =>
     favoriteIds.includes(service.id),
   );
+  const apiFavorites = (data ?? []).filter((service) =>
+    favoriteIds.includes(service.id),
+  );
+  const favoriteServices = [...apiFavorites, ...previousFavorites];
+  const hasApiFavorites = favoriteIds.length > previousFavorites.length;
 
   return (
     <View style={styles.container}>
@@ -35,7 +43,14 @@ export default function FavoritesScreen() {
         Aquí encontrarás los servicios que guardaste.
       </Text>
 
-      {favoriteServices.length === 0 ? (
+      {hasApiFavorites && isLoading && <ServiceQueryStatus message="Cargando favoritos…" />}
+      {hasApiFavorites && isError && (
+        <ServiceQueryStatus
+          message="No se pudieron consultar los servicios favoritos."
+          onRetry={() => void refetch()}
+        />
+      )}
+      {favoriteServices.length === 0 && !(hasApiFavorites && (isLoading || isError)) ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyTitle}>
             Aún no tienes favoritos
