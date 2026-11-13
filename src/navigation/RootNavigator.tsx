@@ -9,6 +9,7 @@ import type {
 } from './types';
 
 import HomeScreen from '../screens/HomeScreen';
+import CreateScreen from '../screens/CreateScreen';
 import DetailScreen from '../screens/DetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import { useFavoritesStore } from '../stores/favoritesStore';
@@ -29,6 +30,11 @@ function HomeStackNavigator() {
         name="HomeDetail"
         component={DetailScreen}
         options={{ title: 'Detalle del servicio' }}
+      />
+      <Stack.Screen
+        name="CreateService"
+        component={CreateScreen}
+        options={{ title: 'Nuevo servicio' }}
       />
     </Stack.Navigator>
   );
