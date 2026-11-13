@@ -2,8 +2,7 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL ??
-  "https://6aee43a0a677fe0fc14fd3b9.mockapi.io";
+  process.env.EXPO_PUBLIC_API_URL ?? "https://6aee43a0a677fe0fc14fd3b9.mockapi.io";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
