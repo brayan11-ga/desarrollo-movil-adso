@@ -25,12 +25,12 @@ export default function CreateScreen({ navigation }: CreateScreenProps) {
       return;
     }
 
-    // El teclado puede usar coma o punto como separador decimal.
-    const numericPrice = Number(price.trim().replace(",", "."));
-    if (!Number.isFinite(numericPrice) || numericPrice <= 0) {
-      setValidationError("Escribe un precio mayor que cero.");
-      return;
-    }
+
+    const numericPrice = Number(price.replace(/\D/g, ""));
+    if (numericPrice <= 0) {
+    setValidationError("Escribe un precio mayor que cero.");
+    return;
+}
 
     setValidationError("");
     mutate(
@@ -64,8 +64,8 @@ export default function CreateScreen({ navigation }: CreateScreenProps) {
         <TextInput accessibilityLabel="Descripción" style={styles.input} value={description} onChangeText={setDescription} multiline />
         <Text>Categoría</Text>
         <TextInput accessibilityLabel="Categoría" style={styles.input} value={category} onChangeText={setCategory} />
-        <Text>Precio en pesos (obligatorio)</Text>
-        <TextInput accessibilityLabel="Precio" style={styles.input} value={price} onChangeText={setPrice} keyboardType="decimal-pad" />
+        <Text>Precio en pesos, solo números (obligatorio)</Text>
+        <TextInput accessibilityLabel="Precio" style={styles.input} value={price} onChangeText={setPrice} keyboardType="number-pad" />
         <Text>Duración</Text>
         <TextInput accessibilityLabel="Duración" style={styles.input} value={duration} onChangeText={setDuration} />
         <Text>URL de imagen (opcional)</Text>
