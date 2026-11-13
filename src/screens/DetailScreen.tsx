@@ -10,22 +10,40 @@ import {
 
 import type { PressableStateCallbackType } from "react-native";
 import ServiceImage from "../components/ServiceImage";
+import ServiceQueryStatus from "../components/ServiceQueryStatus";
+import { useItemById } from "../hooks/useItemById";
 import { useFavoritesStore } from "../stores/favoritesStore";
 import type { HomeStackParamList } from "../navigation/types";
-import { services } from "../data/mockData";
+import { services as previousServices } from "../data/mockData";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
 
 type DetailRouteProp = RouteProp<HomeStackParamList, "HomeDetail">;
 
 export default function DetailScreen() {
   const route = useRoute<DetailRouteProp>();
-  const { id, name } = route.params;
+  const { id } = route.params;
 
   const favorite = useFavoritesStore((state) => state.favoriteIds.includes(id));
   const addFavorite = useFavoritesStore((state) => state.addFavorite);
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
-  const service = services.find((item) => item.id === id);
+  // Los favoritos de semana 04 tienen IDs locales que MockAPI no conoce.
+  const previousService = previousServices.find((item) => item.id === id);
+  const { data, isLoading, isError, refetch } = useItemById(previousService ? "" : id);
+  const service = previousService ?? data;
+
+  if (isLoading) {
+    return <ServiceQueryStatus message="Cargando servicio…" />;
+  }
+
+  if (isError) {
+    return (
+      <ServiceQueryStatus
+        message="No se pudo cargar el detalle del servicio."
+        onRetry={() => void refetch()}
+      />
+    );
+  }
 
   if (!service) {
     return (
@@ -41,7 +59,7 @@ export default function DetailScreen() {
 
       <View style={styles.content}>
         <Text style={styles.category}>{service.category}</Text>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.title}>{service.name}</Text>
         <Text style={styles.description}>{service.description}</Text>
 
         <Pressable

@@ -63,7 +63,6 @@ export default function HomeScreen() {
         onPress={() =>
           navigation.navigate("HomeDetail", {
             id: item.id,
-            name: item.name,
           })
         }
       />

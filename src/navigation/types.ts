@@ -11,7 +11,6 @@ export type HomeStackParamList = {
   CreateService: undefined;
   HomeDetail: {
     id: string;
-    name: string;
   };
 };
 

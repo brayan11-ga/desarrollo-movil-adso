@@ -76,7 +76,6 @@ export default function FavoritesScreen() {
                   screen: "HomeDetail",
                   params: {
                     id: item.id,
-                    name: item.name,
                   },
                 })
               }
