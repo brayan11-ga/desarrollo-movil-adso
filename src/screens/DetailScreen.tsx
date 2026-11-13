@@ -21,7 +21,7 @@ export default function DetailScreen() {
   const route = useRoute<DetailRouteProp>();
   const { id, name } = route.params;
 
-  const favorite = useFavoritesStore((state) => state.favoriteIds.includes(id));
+  const favorite = useFavoritesStore((state) => state.isFavorite(id));
   const addFavorite = useFavoritesStore((state) => state.addFavorite);
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
