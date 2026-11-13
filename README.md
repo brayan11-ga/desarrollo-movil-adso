@@ -2,6 +2,51 @@
 
 Clean Pro es una aplicación móvil para consultar y registrar servicios de limpieza residencial y comercial.
 
+## Semana 06
+
+### Formulario con React Hook Form y Zod
+
+CreateScreen usa `useForm` y `zodResolver(serviceSchema)`. Todos los campos comienzan vacíos.
+Zod contiene las reglas de validación; el formulario muestra cada error debajo de su campo al enviar.
+
+| Campo | Regla del schema |
+| --- | --- |
+| `name` | Texto obligatorio de al menos 2 caracteres. |
+| `description` | Texto opcional. |
+| `category` | Texto obligatorio de al menos 1 carácter. |
+| `price` | `z.coerce.number().positive()`: convierte el texto a número y exige un valor mayor que cero. |
+| `duration` | Texto obligatorio de al menos 1 carácter. |
+| `image` | URL válida, texto vacío o campo omitido. |
+
+Los campos de texto eliminan espacios al principio y al final. El precio se escribe en pesos enteros:
+el campo solo conserva dígitos, sin puntos ni comas. Por ejemplo, escribe `50000`.
+Este filtro controla la escritura; Zod valida el valor antes de enviarlo.
+
+`ServiceFormData` sale de `z.infer<typeof serviceSchema>` y también tipa los datos enviados a la API.
+No hay una segunda definición manual del formulario. El modelo `Service` conserva el ID de la API.
+
+`FormField` reúne `Controller`, etiqueta, `TextInput` y mensaje de error.
+Cada pantalla indica el campo y sus opciones; no necesita repetir la conexión con React Hook Form.
+Los errores usan borde y texto rojos definidos en el theme.
+
+`z.input` representa los valores antes de la conversión del precio.
+`z.output` representa los datos validados, con precio numérico.
+Los genéricos de `useForm` distinguen entrada y salida sin conversiones forzadas de tipos.
+
+Mientras se guarda, el botón queda deshabilitado y aparece un indicador de carga.
+Si el servidor falla, se muestra el error y se conserva lo escrito para reintentar.
+Si tiene éxito, aparece «Servicio creado.» y se vuelve a la pantalla anterior.
+Se mantiene el aviso propio de web y la actualización del catálogo mediante `useCreateItem`.
+
+Dependencias exactas: `react-hook-form@7.72.1`, `zod@4.4.3` y `@hookform/resolvers@5.4.0`.
+En `pnpm-workspace.yaml`, `packageExtensions` conecta el resolver con Zod 4.4.3 para evitar
+que use la versión interna de Expo, cuyos tipos son distintos.
+
+### Capturas de semana 06
+
+**Espacio pendiente para capturas:** formulario vacío, errores debajo de los campos,
+envío en curso y creación exitosa. Guardar las imágenes en `screenshots/` y añadir aquí sus enlaces.
+
 ## Semana 05
 
 ### API y datos
