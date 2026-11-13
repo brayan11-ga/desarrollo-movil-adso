@@ -1,5 +1,6 @@
 import { apiClient } from "./api";
-import type { CreateServicePayload, Service } from "../types";
+import type { Service } from "../types";
+import type { ServiceFormData } from "../schemas/serviceSchema";
 
 export async function getServices(): Promise<Service[]> {
   const response = await apiClient.get<Service[]>("/services");
@@ -11,7 +12,7 @@ export async function getServiceById(id: string): Promise<Service> {
   return response.data;
 }
 
-export async function createService(payload: CreateServicePayload): Promise<Service> {
+export async function createService(payload: ServiceFormData): Promise<Service> {
   const response = await apiClient.post<Service>("/services", payload);
   return response.data;
 }
