@@ -1,6 +1,45 @@
 # CleanPro
 
-CleanPro es una aplicación móvil de ejemplo para consultar servicios de una empresa de limpieza residencial y comercial. La Semana 04 conserva el catálogo, la búsqueda y la navegación existentes, y centraliza los favoritos en Zustand con persistencia local.
+Clean Pro es una aplicación móvil para consultar y registrar servicios de limpieza residencial y comercial.
+
+## Semana 05
+
+### API y datos
+
+Axios se conecta a [MockAPI](https://6aee43a0a677fe0fc14fd3b9.mockapi.io/services). La URL base es `https://6aee43a0a677fe0fc14fd3b9.mockapi.io`. Puedes cambiarla con `EXPO_PUBLIC_API_URL`. La base debe terminar antes de `/services`.
+
+| Petición | Resultado |
+| --- | --- |
+| `GET /services` | Catálogo de servicios |
+| `GET /services/:id` | Detalle del servicio con ese ID |
+| `POST /services` | Servicio creado, incluido el ID asignado por MockAPI |
+
+Cada servicio tiene `id`, `name`, `description`, `category`, `duration` e `image` de tipo texto. El campo `price` es un número en pesos colombianos. Al crear un servicio, el formulario exige nombre y precio mayor que cero. El servidor asigna el ID. Una URL de imagen vacía muestra «Sin imagen».
+
+### Hooks
+
+- `useItems` consulta el catálogo con la clave `['services']`. Inicio y Favoritos comparten el resultado.
+- `useItemById` consulta un detalle con la clave `['services', id]`. Espera a recibir un ID antes de consultar.
+- `useCreateItem` envía el formulario. Tras un POST exitoso, invalida `['services']` para que la lista se actualice al volver.
+
+TanStack Query gestiona los datos de MockAPI. Zustand conserva los IDs favoritos en el dispositivo. Los favoritos guardados en semana 04 siguen abriendo sus fichas locales.
+
+### Ejecutar la app
+
+Desde la raíz del proyecto:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm start
+```
+
+Abre Expo Go con el código QR o pulsa `a` para usar un emulador Android. En Inicio puedes buscar, deslizar para actualizar y elegir «Nuevo servicio».
+
+### Capturas de semana 05
+
+Pendientes: catálogo, detalle, formulario y catálogo después de crear un servicio.
+
+## Semana 04
 
 ## Dominio
 
