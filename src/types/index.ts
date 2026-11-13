@@ -6,5 +6,8 @@ export interface Service {
   category: string;
   price: number;
   duration: string;
-  image: number;
+  image: string;
 }
+
+// MockAPI asigna el ID cuando guarda el servicio.
+export type CreateServicePayload = Omit<Service, "id">;

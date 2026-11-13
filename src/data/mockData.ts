@@ -1,5 +1,12 @@
 
 import type { Service } from "../types";
+import { Asset } from "expo-asset";
+
+// Los favoritos de semana 04 conservan las fotos incluidas en la aplicación.
+const hogar = Asset.fromModule(require("../../assets/services/limpieza-hogar.jpg")).uri;
+const oficinas = Asset.fromModule(require("../../assets/services/limpieza-oficinas.jpg")).uri;
+const profunda = Asset.fromModule(require("../../assets/services/limpieza-profunda.jpg")).uri;
+const ventanas = Asset.fromModule(require("../../assets/services/limpieza-ventanas.jpg")).uri;
 
 export const services: Service[] = [
   {
@@ -9,7 +16,7 @@ export const services: Service[] = [
     category: "Hogar",
     price: 80000,
     duration: "3 horas",
-    image: require("../../assets/services/limpieza-hogar.jpg"),
+    image: hogar,
   },
   {
     id: "service-office",
@@ -18,7 +25,7 @@ export const services: Service[] = [
     category: "Oficinas",
     price: 120000,
     duration: "4 horas",
-    image: require("../../assets/services/limpieza-oficinas.jpg"),
+    image: oficinas,
   },
   {
     id: "service-deep-clean",
@@ -27,7 +34,7 @@ export const services: Service[] = [
     category: "Especializada",
     price: 150000,
     duration: "5 horas",
-    image: require("../../assets/services/limpieza-profunda.jpg"),
+    image: profunda,
   },
   {
     id: "service-windows",
@@ -36,7 +43,7 @@ export const services: Service[] = [
     category: "Cristales",
     price: 60000,
     duration: "2 horas",
-    image: require("../../assets/services/limpieza-ventanas.jpg"),
+    image: ventanas,
   },
   {
     id: "service-disinfection",
@@ -45,7 +52,7 @@ export const services: Service[] = [
     category: "Desinfección",
     price: 95000,
     duration: "2 horas",
-    image: require("../../assets/services/limpieza-profunda.jpg"),
+    image: profunda,
   },
   {
     id: "service-kitchen",
@@ -54,7 +61,7 @@ export const services: Service[] = [
     category: "Hogar",
     price: 70000,
     duration: "2 horas",
-    image: require("../../assets/services/limpieza-hogar.jpg"),
+    image: hogar,
   },
   {
     id: "service-bathroom",
@@ -63,7 +70,7 @@ export const services: Service[] = [
     category: "Hogar",
     price: 55000,
     duration: "1,5 horas",
-    image: require("../../assets/services/limpieza-profunda.jpg"),
+    image: profunda,
   },
   {
     id: "service-post-construction",
@@ -72,7 +79,7 @@ export const services: Service[] = [
     category: "Especializada",
     price: 220000,
     duration: "6 horas",
-    image: require("../../assets/services/limpieza-profunda.jpg"),
+    image: profunda,
   },
   {
     id: "service-upholstery",
@@ -81,7 +88,7 @@ export const services: Service[] = [
     category: "Tapicería",
     price: 130000,
     duration: "3 horas",
-    image: require("../../assets/services/limpieza-hogar.jpg"),
+    image: hogar,
   },
   {
     id: "service-common-areas",
@@ -90,7 +97,7 @@ export const services: Service[] = [
     category: "Conjuntos",
     price: 110000,
     duration: "4 horas",
-    image: require("../../assets/services/limpieza-oficinas.jpg"),
+    image: oficinas,
   },
   {
     id: "service-move-out",
@@ -99,7 +106,7 @@ export const services: Service[] = [
     category: "Hogar",
     price: 170000,
     duration: "5 horas",
-    image: require("../../assets/services/limpieza-hogar.jpg"),
+    image: hogar,
   },
   {
     id: "service-mattress",
@@ -108,6 +115,6 @@ export const services: Service[] = [
     category: "Tapicería",
     price: 85000,
     duration: "2 horas",
-    image: require("../../assets/services/limpieza-hogar.jpg"),
+    image: hogar,
   },
 ];

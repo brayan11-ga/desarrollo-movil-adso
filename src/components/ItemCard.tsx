@@ -1,12 +1,12 @@
 
 import {
-  Image,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import type { Service } from "../types";
+import ServiceImage from "./ServiceImage";
 import type { PressableStateCallbackType } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SPACING, TYPOGRAPHY } from "../theme";
@@ -32,12 +32,7 @@ export default function ItemCard({
       ]}
       onPress={onPress}
     >
-      <Image
-        source={service.image}
-        style={styles.image}
-        resizeMode="cover"
-        accessibilityLabel={service.name}
-      />
+      <ServiceImage uri={service.image} name={service.name} height={170} />
 
       <Pressable
         accessibilityLabel={`${isFavorite ? "Quitar de" : "Agregar a"} favoritos: ${service.name}`}
@@ -96,10 +91,6 @@ const styles = StyleSheet.create({
   cardPressed: {
     opacity: 0.75,
     transform: [{ scale: 0.98 }],
-  },
-  image: {
-    width: "100%",
-    height: 170,
   },
   content: {
     padding: SPACING.card,

@@ -1,7 +1,6 @@
 
 import { useRoute, type RouteProp } from "@react-navigation/native";
 import {
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import type { PressableStateCallbackType } from "react-native";
+import ServiceImage from "../components/ServiceImage";
 import { useFavoritesStore } from "../stores/favoritesStore";
 import type { HomeStackParamList } from "../navigation/types";
 import { services } from "../data/mockData";
@@ -37,12 +37,7 @@ export default function DetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Image
-        source={service.image}
-        style={styles.image}
-        resizeMode="cover"
-        accessibilityLabel={service.name}
-      />
+      <ServiceImage uri={service.image} name={service.name} height={250} />
 
       <View style={styles.content}>
         <Text style={styles.category}>{service.category}</Text>
@@ -92,10 +87,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-  },
-  image: {
-    width: "100%",
-    height: 250,
   },
   content: {
     padding: SPACING.xl,
